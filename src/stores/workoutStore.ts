@@ -21,8 +21,8 @@ export interface WorkoutExercise {
 
 export interface WorkoutState {
   // Session
-  sessionId: string | null;
-  startedAt: Date | null;
+  sessionId: string;
+  startedAt: Date;
 
   // Exercises
   exercises: WorkoutExercise[];
@@ -52,8 +52,8 @@ export interface WorkoutState {
 // ---------------------------------------------------------------------------
 
 export const useWorkoutStore = create<WorkoutState>((set, get) => ({
-  sessionId: null,
-  startedAt: null,
+  sessionId: '',
+  startedAt: new Date(0),
   exercises: [],
   currentExerciseIndex: 0,
   restTimerEnd: null,
@@ -80,7 +80,6 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
   completeSet: async (reps, weightKg) => {
     const state = get();
     const { sessionId, exercises, currentExerciseIndex } = state;
-    if (!sessionId) return;
 
     const ex = exercises[currentExerciseIndex];
     if (!ex || ex.completed) return;
@@ -122,9 +121,6 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
   finishWorkout: async () => {
     const state = get();
     const { sessionId, startedAt } = state;
-    if (!sessionId || !startedAt) {
-      return { duration: 0, volume: 0, sets: 0 };
-    }
 
     const endedAt = new Date();
     const durationSeconds = Math.round(
@@ -140,8 +136,8 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
 
   reset: () => {
     set({
-      sessionId: null,
-      startedAt: null,
+      sessionId: '',
+      startedAt: new Date(0),
       exercises: [],
       currentExerciseIndex: 0,
       restTimerEnd: null,
