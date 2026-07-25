@@ -32,7 +32,7 @@ export default function WorkoutCompleteScreen() {
     if (notes.trim() && sessionId) {
       await addNotes(sessionId, notes.trim());
     }
-    router.replace('/(tabs)');
+    router.replace('/');
   };
 
   return (
