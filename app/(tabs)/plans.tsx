@@ -1,3 +1,7 @@
+import type { PlanWithDays } from '@/db/plans';
+import { DAY_LABELS } from '@/db/plans';
+import { usePlanStore } from '@/stores/planStore';
+import { colors, spacing, typography } from '@/theme';
 import { router } from 'expo-router';
 import { useLayoutEffect, useState } from 'react';
 import {
@@ -8,10 +12,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import type { PlanWithDays } from '@//db/plans';
-import { DAY_LABELS } from '@//db/plans';
-import { usePlanStore } from '@//stores/planStore';
-import { colors, spacing, typography } from '@//theme';
 
 export default function PlansScreen() {
   const { plans, status, loadPlans, removePlan } = usePlanStore();

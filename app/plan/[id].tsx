@@ -1,17 +1,17 @@
+import { DAY_LABELS, type PlanWithDays } from '@/db/plans';
+import { useExerciseStore } from '@/stores/exerciseStore';
+import { usePlanStore } from '@/stores/planStore';
+import { colors, spacing, typography } from '@/theme';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Alert,
+    Alert,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
-import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
-import { colors, spacing, typography } from '@//theme';
-import { usePlanStore } from '@//stores/planStore';
-import { useExerciseStore } from '@//stores/exerciseStore';
-import { DAY_LABELS, type PlanWithDays } from '@//db/plans';
 
 export default function PlanDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
