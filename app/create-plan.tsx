@@ -1,17 +1,17 @@
+import { router } from 'expo-router';
 import { useState } from 'react';
 import {
-  View,
+  Alert,
+  ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Alert,
+  View,
 } from 'react-native';
-import { router } from 'expo-router';
-import { colors, spacing, typography } from '../src/theme';
-import { usePlanStore } from '../src/stores/planStore';
 import { DAY_LABELS, DAY_LABELS_FULL } from '../src/db/plans';
+import { usePlanStore } from '../src/stores/planStore';
+import { colors, spacing, typography } from '../src/theme';
 
 export default function CreatePlanScreen() {
   const [name, setName] = useState('');
@@ -19,11 +19,11 @@ export default function CreatePlanScreen() {
   const [selectedDays, setSelectedDays] = useState<number[]>([]);
   const addPlan = usePlanStore((s) => s.addPlan);
 
-  const toggleDay = (index: number) => {
+  const toggleDay = (day: number) => {
     setSelectedDays((prev) =>
-      prev.includes(index)
-        ? prev.filter((d) => d !== index)
-        : [...prev, index].sort(),
+      prev.includes(day)
+        ? prev.filter((d) => d !== day)
+        : [...prev, day].sort(),
     );
   };
 
