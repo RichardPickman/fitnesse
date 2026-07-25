@@ -1,23 +1,23 @@
-import { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-} from 'react-native';
 import { router } from 'expo-router';
-import { colors, spacing, typography } from '../../src/theme';
-import { usePlanStore } from '../../src/stores/planStore';
-import { DAY_LABELS } from '../../src/db/plans';
+import { useLayoutEffect, useState } from 'react';
+import {
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import type { PlanWithDays } from '../../src/db/plans';
+import { DAY_LABELS } from '../../src/db/plans';
+import { usePlanStore } from '../../src/stores/planStore';
+import { colors, spacing, typography } from '../../src/theme';
 
 export default function PlansScreen() {
   const { plans, status, loadPlans, removePlan } = usePlanStore();
   const [deleting, setDeleting] = useState<string | null>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadPlans();
   }, []);
 
