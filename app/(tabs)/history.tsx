@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, typography } from '../../src/theme';
+import { colors, spacing, typography } from '@/theme';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function HistoryScreen() {
   return (

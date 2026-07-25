@@ -1,6 +1,6 @@
-import { Text } from 'react-native';
+import { colors } from '@/theme';
 import { Tabs } from 'expo-router';
-import { colors } from '../../src/theme';
+import { Text } from 'react-native';
 
 export default function TabLayout() {
   return (

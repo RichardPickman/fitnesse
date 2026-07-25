@@ -11,17 +11,17 @@ import {
   Modal,
 } from 'react-native';
 import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
-import { colors, spacing, typography } from '../../../../src/theme';
-import { usePlanStore } from '../../../../src/stores/planStore';
-import { useExerciseStore } from '../../../../src/stores/exerciseStore';
+import { colors, spacing, typography } from '@/theme';
+import { usePlanStore } from '@/stores/planStore';
+import { useExerciseStore } from '@/stores/exerciseStore';
 import {
   getEntriesForDay,
   addExerciseToDay,
   removeExerciseFromDay,
   DAY_LABELS,
   type PlanExerciseEntry,
-} from '../../../../src/db/plans';
-import type { Exercise } from '../../../../src/db/exercises';
+} from '@/db/plans';
+import type { Exercise } from '@/db/exercises';
 
 export default function DayEditorScreen() {
   const { id: planId, dayId } = useLocalSearchParams<{ id: string; dayId: string }>();
