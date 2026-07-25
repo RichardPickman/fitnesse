@@ -216,6 +216,7 @@ Workout player is a full-screen stack pushed over the tab bar (not a tab).
 | Exercise picker | Bottom sheet with search + muscle group filter |
 | Supersets | Paired exercises, no rest between, rest after pair complete |
 | Backlog | Shuffle exercises, plan marketplace, custom sounds, paywalled photo cloud |
+| Store init | Replace `useEffect` in screens with root-level store hydration (no re-render on mount) |
 
 ---
 
