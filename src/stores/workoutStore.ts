@@ -34,9 +34,9 @@ export interface WorkoutState {
 
   // Actions
   initWorkout: (
-    planId: string | null,
-    planDayId: string | null,
-    planVersionHash: string | null,
+    planId: string,
+    planDayId: string,
+    planVersionHash: string,
     entries: PlanExerciseEntry[],
   ) => Promise<void>;
   completeSet: (reps: number, weightKg: number | null) => Promise<void>;
@@ -59,7 +59,7 @@ export const useWorkoutStore = create<WorkoutState>((set, get) => ({
   restTimerEnd: null,
   restTimerRunning: false,
 
-  initWorkout: async (planId, planDayId, planVersionHash, entries) => {
+  initWorkout: async (planId: string, planDayId: string, planVersionHash: string, entries) => {
     const sessionId = await startSession(planId, planDayId, planVersionHash);
     set({
       sessionId,

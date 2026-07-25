@@ -36,9 +36,9 @@ function newId(): string {
 // ---------------------------------------------------------------------------
 
 export async function startSession(
-  planId: string | null,
-  planDayId: string | null,
-  planVersionHash: string | null,
+  planId: string,
+  planDayId: string,
+  planVersionHash: string,
 ): Promise<string> {
   const db = await getDb();
   const sessionId = newId();
