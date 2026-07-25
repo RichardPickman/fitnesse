@@ -129,6 +129,18 @@ export default function PlanDetailScreen() {
                 </Text>
               </View>
             )}
+
+            {/* Start Workout button */}
+            {day.entries.length > 0 && (
+              <TouchableOpacity
+                style={styles.startWorkoutButton}
+                onPress={() =>
+                  router.push(`/workout/${plan.plan.id}?dayId=${day.id}`)
+                }
+              >
+                <Text style={styles.startWorkoutText}>▶ Start Workout</Text>
+              </TouchableOpacity>
+            )}
           </View>
         ))}
       </ScrollView>
@@ -258,6 +270,18 @@ const styles = StyleSheet.create({
   exerciseStats: {
     ...typography.caption,
     color: colors.accent,
+  },
+  startWorkoutButton: {
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    paddingVertical: spacing.md,
+    alignItems: 'center',
+    marginTop: spacing.sm,
+  },
+  startWorkoutText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.bg,
   },
   deleteButton: {
     paddingVertical: spacing.lg,

@@ -41,6 +41,14 @@ export default function RootLayout() {
           }}
         />
         <Stack.Screen name="plan/[id]/day/[dayId]" />
+        <Stack.Screen
+          name="workout/[planId]"
+          options={{ animation: 'slide_from_bottom' }}
+        />
+        <Stack.Screen
+          name="workout/complete"
+          options={{ animation: 'fade' }}
+        />
       </Stack>
     </>
   );
