@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useRef, useCallback } from 'react';
+import { useEffect, useMemo, useState, useCallback } from 'react';
 import {
   View,
   Text,
@@ -39,8 +39,7 @@ export default function WorkoutPlayerScreen() {
     : null;
 
   const [repsOverride, setRepsOverride] = useState<number | null>(null);
-  const [restCountdown, setRestCountdown] = useState<number | null>(null);
-  const restInterval = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [restRemaining, setRestRemaining] = useState<number | null>(null);
 
   // Init workout on mount
   useEffect(() => {
@@ -52,33 +51,27 @@ export default function WorkoutPlayerScreen() {
         day.entries,
       );
     }
-    return () => {
-      if (restInterval.current) clearInterval(restInterval.current);
-    };
   }, []);
 
-  // Rest timer countdown
+  // Rest timer: counts down every 250ms, auto-skips when it hits 0
   useEffect(() => {
-    if (restTimerRunning && restTimerEnd) {
-      restInterval.current = setInterval(() => {
-        const remaining = Math.max(
-          0,
-          Math.round((restTimerEnd.getTime() - Date.now()) / 1000),
-        );
-        setRestCountdown(remaining);
-        if (remaining <= 0) {
-          if (restInterval.current) clearInterval(restInterval.current);
-          skipRest();
-          setRestCountdown(null);
-        }
-      }, 250);
-    } else {
-      if (restInterval.current) clearInterval(restInterval.current);
-      setRestCountdown(null);
+    if (!restTimerRunning || !restTimerEnd) {
+      setRestRemaining(null);
+      return;
     }
-    return () => {
-      if (restInterval.current) clearInterval(restInterval.current);
+
+    const tick = () => {
+      const remaining = Math.max(0, Math.round((restTimerEnd.getTime() - Date.now()) / 1000));
+      setRestRemaining(remaining);
+      if (remaining <= 0) {
+        skipRest();
+        setRestRemaining(null);
+      }
     };
+
+    tick();
+    const id = setInterval(tick, 250);
+    return () => clearInterval(id);
   }, [restTimerRunning, restTimerEnd?.getTime()]);
 
   const handleCompleteSet = () => {
@@ -204,9 +197,9 @@ export default function WorkoutPlayerScreen() {
         </TouchableOpacity>
       ) : (
         <View style={styles.restActive}>
-          <Text style={styles.restCountdown}>
-            {restCountdown !== null
-              ? `${Math.floor(restCountdown / 60)}:${String(restCountdown % 60).padStart(2, '0')}`
+          <Text style={styles.restRemaining}>
+            {restRemaining !== null
+              ? `${Math.floor(restRemaining / 60)}:${String(restRemaining % 60).padStart(2, '0')}`
               : '...'}
           </Text>
           <TouchableOpacity onPress={skipRest}>
@@ -366,7 +359,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  restCountdown: {
+  restRemaining: {
     fontSize: 28,
     fontWeight: '700',
     color: colors.accent,
