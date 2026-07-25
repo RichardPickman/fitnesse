@@ -141,5 +141,33 @@ export async function updatePlanName(planId: string, name: string): Promise<void
   );
 }
 
+export async function updatePlan(
+  planId: string,
+  name: string,
+  description: string | null,
+  dayIndices: number[],
+): Promise<void> {
+  const db = await getDb();
+  const versionHash = hashPlanContent(name, dayIndices);
+
+  await db.runAsync(
+    "UPDATE plans SET name = ?, description = ?, version_hash = ?, updated_at = datetime('now') WHERE id = ?",
+    [name, description, versionHash, planId],
+  );
+
+  // Replace days: delete old, insert new
+  await db.runAsync('DELETE FROM plan_days WHERE plan_id = ?', [planId]);
+
+  const stmt = await db.prepareAsync(
+    'INSERT INTO plan_days (id, plan_id, day_of_week, sort_order) VALUES (?, ?, ?, ?)',
+  );
+
+  for (let i = 0; i < dayIndices.length; i++) {
+    await stmt.executeAsync([newId(), planId, dayIndices[i], i]);
+  }
+
+  await stmt.finalizeAsync();
+}
+
 export const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 export const DAY_LABELS_FULL = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

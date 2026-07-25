@@ -76,9 +76,7 @@ export default function PlansScreen() {
               style={styles.planCard}
               activeOpacity={0.7}
               onLongPress={() => handleDelete(item)}
-              onPress={() => {
-                // TODO: navigate to plan detail (future ticket)
-              }}
+              onPress={() => router.push(`/plan/${item.plan.id}`)}
             >
               <View style={styles.planHeader}>
                 <Text style={styles.planName}>{item.plan.name}</Text>
