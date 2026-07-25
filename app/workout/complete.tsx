@@ -21,13 +21,6 @@ export default function WorkoutCompleteScreen() {
   }>();
 
   const [notes, setNotes] = useState('');
-  const reset = useWorkoutStore((s) => s.reset);
-
-  useEffect(() => {
-    return () => {
-      reset();
-    };
-  }, []);
 
   const formatDuration = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);

@@ -28,6 +28,7 @@ export default function WorkoutPlayerScreen() {
     startRest,
     skipRest,
     finishWorkout,
+    reset,
   } = useWorkoutStore();
 
   const plan = plans.find((p) => p.plan.id === planId);
@@ -89,6 +90,7 @@ export default function WorkoutPlayerScreen() {
 
   const handleFinishWorkout = async () => {
     const result = await finishWorkout();
+    reset();
     router.replace(
       `/workout/complete?duration=${result.duration}&volume=${result.volume}&sets=${result.sets}&sessionId=${sessionId}`,
     );
