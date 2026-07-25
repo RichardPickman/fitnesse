@@ -10,11 +10,13 @@ import {
 import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
 import { colors, spacing, typography } from '../../src/theme';
 import { usePlanStore } from '../../src/stores/planStore';
+import { useExerciseStore } from '../../src/stores/exerciseStore';
 import { DAY_LABELS, type PlanWithDays } from '../../src/db/plans';
 
 export default function PlanDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { plans, loadPlans, removePlan } = usePlanStore();
+  const { exercises } = useExerciseStore();
   const plan = plans.find((p) => p.plan.id === id) ?? null;
 
   // Reload on focus in case edits happened
@@ -94,18 +96,39 @@ export default function PlanDetailScreen() {
             <View style={styles.dayHeader}>
               <Text style={styles.dayTitle}>{DAY_LABELS[day.day_of_week]}</Text>
               <TouchableOpacity
-                onPress={() => {
-                  // TODO: navigate to per-day exercise editor (next ticket)
-                }}
+                onPress={() => router.push(`/plan/${plan.plan.id}/day/${day.id}`)}
               >
-                <Text style={styles.addExerciseLink}>+ Add exercises</Text>
+                <Text style={styles.addExerciseLink}>
+                  {day.entries.length > 0
+                    ? `${day.entries.length} exercise${day.entries.length !== 1 ? 's' : ''} · Edit`
+                    : '+ Add exercises'}
+                </Text>
               </TouchableOpacity>
             </View>
-            <View style={styles.emptyDay}>
-              <Text style={styles.emptyDayText}>
-                No exercises yet. Tap to add.
-              </Text>
-            </View>
+            {day.entries.length > 0 ? (
+              <View style={styles.exerciseList}>
+                {day.entries.map((entry) => (
+                  <TouchableOpacity
+                    key={entry.id}
+                    style={styles.exerciseRow}
+                    onPress={() => router.push(`/plan/${plan.plan.id}/day/${day.id}`)}
+                  >
+                    <Text style={styles.exerciseName}>
+                      {exercises.find((e) => e.id === entry.exercise_id)?.name ?? 'Unknown'}
+                    </Text>
+                    <Text style={styles.exerciseStats}>
+                      {entry.target_sets}×{entry.target_reps}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ) : (
+              <View style={styles.emptyDay}>
+                <Text style={styles.emptyDayText}>
+                  No exercises yet. Tap to add.
+                </Text>
+              </View>
+            )}
           </View>
         ))}
       </ScrollView>
@@ -213,6 +236,28 @@ const styles = StyleSheet.create({
     ...typography.body,
     color: colors.textMuted,
     textAlign: 'center',
+  },
+  exerciseList: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  exerciseRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  exerciseName: {
+    ...typography.body,
+  },
+  exerciseStats: {
+    ...typography.caption,
+    color: colors.accent,
   },
   deleteButton: {
     paddingVertical: spacing.lg,

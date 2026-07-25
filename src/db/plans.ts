@@ -35,7 +35,7 @@ export interface PlanExerciseEntry {
 
 export interface PlanWithDays {
   plan: Plan;
-  days: PlanDay[];
+  days: (PlanDay & { entries: PlanExerciseEntry[] })[];
 }
 
 function hashPlanContent(name: string, days: number[]): string {
@@ -101,7 +101,13 @@ export async function getPlans(): Promise<PlanWithDays[]> {
       'SELECT * FROM plan_days WHERE plan_id = ? ORDER BY sort_order',
       [plan.id],
     );
-    result.push({ plan, days });
+    const daysWithEntries = await Promise.all(
+      days.map(async (day) => {
+        const entries = await getEntriesForDay(day.id);
+        return { ...day, entries };
+      }),
+    );
+    result.push({ plan, days: daysWithEntries });
   }
 
   return result;
@@ -121,7 +127,14 @@ export async function getPlanById(planId: string): Promise<PlanWithDays | null> 
     [planId],
   );
 
-  return { plan, days };
+  const daysWithEntries = await Promise.all(
+    days.map(async (day) => {
+      const entries = await getEntriesForDay(day.id);
+      return { ...day, entries };
+    }),
+  );
+
+  return { plan, days: daysWithEntries };
 }
 
 export async function deletePlan(planId: string): Promise<void> {
@@ -167,6 +180,61 @@ export async function updatePlan(
   }
 
   await stmt.finalizeAsync();
+}
+
+// ---------------------------------------------------------------------------
+// Exercise entries CRUD
+// ---------------------------------------------------------------------------
+
+export async function getEntriesForDay(dayId: string): Promise<PlanExerciseEntry[]> {
+  const db = await getDb();
+  return db.getAllAsync<PlanExerciseEntry>(
+    'SELECT * FROM plan_exercise_entries WHERE plan_day_id = ? ORDER BY sort_order',
+    [dayId],
+  );
+}
+
+export async function addExerciseToDay(
+  dayId: string,
+  exerciseId: string,
+  sortOrder: number,
+): Promise<string> {
+  const db = await getDb();
+  const entryId = newId();
+  await db.runAsync(
+    `INSERT INTO plan_exercise_entries (id, plan_day_id, exercise_id, target_sets, target_reps, rest_seconds)
+     VALUES (?, ?, ?, 3, 10, 90)`,
+    [entryId, dayId, exerciseId],
+  );
+  return entryId;
+}
+
+export async function removeExerciseFromDay(entryId: string): Promise<void> {
+  const db = await getDb();
+  await db.runAsync('DELETE FROM plan_exercise_entries WHERE id = ?', [entryId]);
+}
+
+export async function updateExerciseEntry(
+  entryId: string,
+  updates: Partial<Pick<PlanExerciseEntry, 'target_sets' | 'target_reps' | 'rest_seconds' | 'weight_kg' | 'superset_group'>>,
+): Promise<void> {
+  const db = await getDb();
+  const fields: string[] = [];
+  const values: (string | number | null)[] = [];
+
+  if (updates.target_sets !== undefined) { fields.push('target_sets = ?'); values.push(updates.target_sets); }
+  if (updates.target_reps !== undefined) { fields.push('target_reps = ?'); values.push(updates.target_reps); }
+  if (updates.rest_seconds !== undefined) { fields.push('rest_seconds = ?'); values.push(updates.rest_seconds); }
+  if (updates.weight_kg !== undefined) { fields.push('weight_kg = ?'); values.push(updates.weight_kg); }
+  if (updates.superset_group !== undefined) { fields.push('superset_group = ?'); values.push(updates.superset_group); }
+
+  if (fields.length === 0) return;
+
+  values.push(entryId);
+  await db.runAsync(
+    `UPDATE plan_exercise_entries SET ${fields.join(', ')} WHERE id = ?`,
+    values,
+  );
 }
 
 export const DAY_LABELS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
