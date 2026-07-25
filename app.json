@@ -21,8 +21,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-sqlite"
-    ]
+    "scheme": "fitnesse",
+  "plugins": [
+    "expo-sqlite",
+    "expo-router",
+    "expo-status-bar"
+  ]
   }
 }

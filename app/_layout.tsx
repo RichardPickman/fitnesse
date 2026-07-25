@@ -1,0 +1,29 @@
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
+import { useEffect } from 'react';
+import { initDatabase } from '../src/db/local';
+import { useExerciseStore } from '../src/stores/exerciseStore';
+import { colors } from '../src/theme';
+
+export default function RootLayout() {
+  const loadLibrary = useExerciseStore((s) => s.loadLibrary);
+
+  useEffect(() => {
+    initDatabase().catch((err) =>
+      console.warn('[db] init failed', err),
+    );
+    loadLibrary();
+  }, []);
+
+  return (
+    <>
+      <StatusBar style="light" />
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.bg },
+        }}
+      />
+    </>
+  );
+}
