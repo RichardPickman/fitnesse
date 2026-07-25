@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
-import { colors, spacing, typography } from '../../src/theme';
+import { colors, spacing, typography } from '@//theme';
 
 export default function HomeScreen() {
   const today = new Date().toLocaleDateString('en-US', {

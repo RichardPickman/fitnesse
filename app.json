@@ -16,16 +16,17 @@
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.anonymous.fitnesse"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "scheme": "fitnesse",
-  "plugins": [
-    "expo-sqlite",
-    "expo-router",
-    "expo-status-bar"
-  ]
+    "plugins": [
+      "expo-sqlite",
+      "expo-router",
+      "expo-status-bar"
+    ]
   }
 }
