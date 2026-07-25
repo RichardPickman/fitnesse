@@ -38,20 +38,21 @@ export default function WorkoutPlayerScreen() {
     ? exerciseLib.find((e) => e.id === currentWorkoutEx.entry.exercise_id)
     : null;
 
+  const [started, setStarted] = useState(false);
   const [repsOverride, setRepsOverride] = useState<number | null>(null);
   const [restRemaining, setRestRemaining] = useState<number | null>(null);
 
-  // Init workout on mount
-  useEffect(() => {
+  const handleStart = async () => {
     if (plan && day) {
-      initWorkout(
+      await initWorkout(
         plan.plan.id,
         day.id,
         plan.plan.version_hash,
         day.entries,
       );
+      setStarted(true);
     }
-  }, []);
+  };
 
   // Rest timer: counts down every 250ms, auto-skips when it hits 0
   useEffect(() => {
@@ -104,6 +105,32 @@ export default function WorkoutPlayerScreen() {
   const primaryMuscles = currentExercise
     ? getMusclesForExercise(currentExercise.id).primary.map((m) => m.name).join(', ')
     : '';
+
+  // Pre-start: show a "Ready?" view
+  if (!started) {
+    const firstExercise = day?.entries[0]
+      ? exerciseLib.find((e) => e.id === day.entries[0].exercise_id)
+      : null;
+
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centered}>
+          <Text style={styles.startTitle}>{plan?.plan.name ?? 'Workout'}</Text>
+          <Text style={styles.startSubtitle}>
+            {day?.entries.length ?? 0} exercise{(day?.entries.length ?? 0) !== 1 ? 's' : ''}
+          </Text>
+          {firstExercise && (
+            <Text style={styles.startFirst}>
+              First up: {firstExercise.name}
+            </Text>
+          )}
+          <TouchableOpacity style={styles.startButton} onPress={handleStart} activeOpacity={0.8}>
+            <Text style={styles.startButtonText}>▶ Start Workout</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   if (!currentWorkoutEx || !currentExercise) {
     return (
@@ -238,6 +265,35 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+  },
+  // Pre-start
+  startTitle: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: spacing.sm,
+  },
+  startSubtitle: {
+    ...typography.subtitle,
+    color: colors.textSecondary,
+    marginBottom: spacing.xl,
+  },
+  startFirst: {
+    ...typography.body,
+    color: colors.accent,
+    marginBottom: spacing.xxl,
+  },
+  startButton: {
+    backgroundColor: colors.accent,
+    borderRadius: 16,
+    paddingHorizontal: spacing.xxl + 20,
+    paddingVertical: spacing.lg,
+  },
+  startButtonText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: colors.bg,
   },
   // Progress
   progressBar: {
