@@ -1,0 +1,227 @@
+import { useCallback, useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+} from 'react-native';
+import { router, useLocalSearchParams, useFocusEffect } from 'expo-router';
+import { colors, spacing, typography } from '../../src/theme';
+import { usePlanStore } from '../../src/stores/planStore';
+import { DAY_LABELS, type PlanWithDays } from '../../src/db/plans';
+
+export default function PlanDetailScreen() {
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const { plans, loadPlans, removePlan } = usePlanStore();
+  const plan = plans.find((p) => p.plan.id === id) ?? null;
+
+  // Reload on focus in case edits happened
+  useFocusEffect(
+    useCallback(() => {
+      loadPlans();
+    }, []),
+  );
+
+  if (!plan) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyText}>Plan not found</Text>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Text style={styles.backLink}>Go back</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  const handleDelete = () => {
+    Alert.alert(
+      `Delete "${plan.plan.name}"?`,
+      'This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            await removePlan(plan.plan.id);
+            router.back();
+          },
+        },
+      ],
+    );
+  };
+
+  const formatDays = (p: PlanWithDays): string => {
+    return p.days.map((d) => DAY_LABELS[d.day_of_week]).join(', ');
+  };
+
+  return (
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={styles.backButton}>← Plans</Text>
+        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity
+            onPress={() =>
+              router.push(`/plan/${plan.plan.id}/edit`)
+            }
+          >
+            <Text style={styles.editButton}>Edit</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <ScrollView style={styles.body} contentContainerStyle={{ paddingBottom: 40 }}>
+        {/* Plan info */}
+        <Text style={styles.planName}>{plan.plan.name}</Text>
+        {plan.plan.description && (
+          <Text style={styles.planDescription}>{plan.plan.description}</Text>
+        )}
+
+        {/* Days */}
+        <Text style={styles.sectionTitle}>Training Days</Text>
+        <Text style={styles.daysValue}>{formatDays(plan)}</Text>
+
+        {/* Per-day exercise sections */}
+        {plan.days.map((day) => (
+          <View key={day.id} style={styles.daySection}>
+            <View style={styles.dayHeader}>
+              <Text style={styles.dayTitle}>{DAY_LABELS[day.day_of_week]}</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  // TODO: navigate to per-day exercise editor (next ticket)
+                }}
+              >
+                <Text style={styles.addExerciseLink}>+ Add exercises</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={styles.emptyDay}>
+              <Text style={styles.emptyDayText}>
+                No exercises yet. Tap to add.
+              </Text>
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+
+      {/* Delete at bottom */}
+      <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+        <Text style={styles.deleteText}>Delete Plan</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.bg,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: spacing.lg,
+    paddingTop: 60,
+    paddingBottom: spacing.md,
+  },
+  backButton: {
+    ...typography.body,
+    color: colors.accent,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    gap: spacing.md,
+  },
+  editButton: {
+    ...typography.body,
+    color: colors.accent,
+    fontWeight: '600',
+  },
+  body: {
+    flex: 1,
+    paddingHorizontal: spacing.lg,
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyText: {
+    ...typography.body,
+    color: colors.textSecondary,
+    marginBottom: spacing.md,
+  },
+  backLink: {
+    color: colors.accent,
+    fontSize: 16,
+  },
+  planName: {
+    ...typography.title,
+    fontSize: 26,
+    marginBottom: spacing.xs,
+  },
+  planDescription: {
+    ...typography.body,
+    color: colors.textSecondary,
+    marginBottom: spacing.xl,
+    lineHeight: 22,
+  },
+  sectionTitle: {
+    ...typography.subtitle,
+    fontSize: 16,
+    marginBottom: spacing.sm,
+  },
+  daysValue: {
+    ...typography.body,
+    color: colors.accent,
+    marginBottom: spacing.xl,
+  },
+  daySection: {
+    marginBottom: spacing.xl,
+  },
+  dayHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.sm,
+  },
+  dayTitle: {
+    ...typography.subtitle,
+    fontSize: 17,
+  },
+  addExerciseLink: {
+    color: colors.accent,
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  emptyDay: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: spacing.lg,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderStyle: 'dashed',
+  },
+  emptyDayText: {
+    ...typography.body,
+    color: colors.textMuted,
+    textAlign: 'center',
+  },
+  deleteButton: {
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    alignItems: 'center',
+  },
+  deleteText: {
+    color: colors.error,
+    fontSize: 15,
+    fontWeight: '600',
+  },
+});

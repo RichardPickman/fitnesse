@@ -32,6 +32,14 @@ export default function RootLayout() {
             animation: 'slide_from_bottom',
           }}
         />
+        <Stack.Screen name="plan/[id]" />
+        <Stack.Screen
+          name="plan/[id]/edit"
+          options={{
+            presentation: 'modal',
+            animation: 'slide_from_bottom',
+          }}
+        />
       </Stack>
     </>
   );

@@ -4,6 +4,7 @@ import {
   getPlans,
   createPlan,
   deletePlan,
+  updatePlan as updatePlanDb,
 } from '../db/plans';
 
 // ---------------------------------------------------------------------------
@@ -18,6 +19,7 @@ interface PlanState {
   loadPlans: () => Promise<void>;
   addPlan: (name: string, description: string | null, dayIndices: number[]) => Promise<string>;
   removePlan: (planId: string) => Promise<void>;
+  editPlan: (planId: string, name: string, description: string | null, dayIndices: number[]) => Promise<void>;
 }
 
 // ---------------------------------------------------------------------------
@@ -42,13 +44,17 @@ export const usePlanStore = create<PlanState>((set, get) => ({
 
   addPlan: async (name, description, dayIndices) => {
     const planId = await createPlan(name, description, dayIndices);
-    // Reload to keep state in sync
     await get().loadPlans();
     return planId;
   },
 
   removePlan: async (planId) => {
     await deletePlan(planId);
+    await get().loadPlans();
+  },
+
+  editPlan: async (planId, name, description, dayIndices) => {
+    await updatePlanDb(planId, name, description, dayIndices);
     await get().loadPlans();
   },
 }));
