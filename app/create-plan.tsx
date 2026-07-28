@@ -42,7 +42,9 @@ export default function CreatePlanScreen() {
       await addPlan(trimmedName, description.trim() || null, selectedDays);
       router.back();
     } catch (err) {
-      Alert.alert('Error', 'Failed to save plan.');
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('[createPlan]', message);
+      Alert.alert('Error', 'Failed to save plan. ' + message);
     }
   };
 

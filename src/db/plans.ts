@@ -1,3 +1,4 @@
+import { newId } from './helpers';
 import { getDb } from './local';
 
 // ---------------------------------------------------------------------------
@@ -49,10 +50,6 @@ function hashPlanContent(name: string, days: number[]): string {
     hash |= 0; // Convert to 32bit int
   }
   return Math.abs(hash).toString(16);
-}
-
-function newId(): string {
-  return crypto.randomUUID();
 }
 
 // ---------------------------------------------------------------------------

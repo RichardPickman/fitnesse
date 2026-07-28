@@ -1,3 +1,4 @@
+import { newId } from './helpers';
 import { getDb } from './local';
 import type { PlanExerciseEntry } from './plans';
 
@@ -25,10 +26,6 @@ export interface SetLog {
   reps_actual: number;
   weight_kg: number | null;
   completed_at: string;
-}
-
-function newId(): string {
-  return crypto.randomUUID();
 }
 
 // ---------------------------------------------------------------------------

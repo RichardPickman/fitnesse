@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import {
   type PlanWithDays,
-  getPlans,
   createPlan,
   deletePlan,
+  getPlans,
   updatePlan as updatePlanDb,
 } from '../db/plans';
 

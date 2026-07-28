@@ -2,8 +2,17 @@ import * as SQLite from 'expo-sqlite';
 
 const DB_NAME = 'fitnesse.db';
 
+let _db: SQLite.SQLiteDatabase | null = null;
+
+async function openDb(): Promise<SQLite.SQLiteDatabase> {
+  if (!_db) {
+    _db = await SQLite.openDatabaseAsync(DB_NAME);
+  }
+  return _db;
+}
+
 export async function initDatabase(): Promise<SQLite.SQLiteDatabase> {
-  const db = await SQLite.openDatabaseAsync(DB_NAME);
+  const db = await openDb();
 
   // Plans
   await db.execAsync(`
@@ -108,5 +117,5 @@ export async function initDatabase(): Promise<SQLite.SQLiteDatabase> {
 }
 
 export async function getDb(): Promise<SQLite.SQLiteDatabase> {
-  return SQLite.openDatabaseAsync(DB_NAME);
+  return openDb();
 }
