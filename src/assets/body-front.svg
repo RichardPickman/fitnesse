@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 500" fill="none">
+  <!-- Head / Neck -->
+  <ellipse id="head" cx="100" cy="35" rx="22" ry="26" stroke="#555" stroke-width="1.5"/>
+  <path id="neck" d="M90 58 Q100 68 110 58" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Shoulders -->
+  <path id="shoulders" d="M40 72 Q42 65 55 68 L145 68 Q158 65 160 72" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Chest -->
+  <path id="chest" d="M55 72 Q55 110 70 120 L130 120 Q145 110 145 72" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Abs -->
+  <path id="abs" d="M72 122 Q72 170 80 185 L120 185 Q128 170 128 122" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Biceps Left -->
+  <path id="biceps-l" d="M40 72 Q30 100 32 130 L48 128 Q46 100 55 72" stroke="#555" stroke-width="1.5" fill="none"/>
+  <!-- Biceps Right -->
+  <path id="biceps-r" d="M160 72 Q170 100 168 130 L152 128 Q154 100 145 72" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Forearms Left -->
+  <path id="forearms-l" d="M32 132 Q28 170 30 200 L46 198 Q44 170 48 130" stroke="#555" stroke-width="1.5" fill="none"/>
+  <!-- Forearms Right -->
+  <path id="forearms-r" d="M168 132 Q172 170 170 200 L154 198 Q156 170 152 130" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Hands Left -->
+  <path id="hands-l" d="M30 202 Q28 215 32 220 L44 218 Q46 210 46 200" stroke="#555" stroke-width="1.5" fill="none"/>
+  <!-- Hands Right -->
+  <path id="hands-r" d="M170 202 Q172 215 168 220 L156 218 Q154 210 154 200" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Quads -->
+  <path id="quads" d="M82 187 Q78 230 80 280 L120 280 Q122 230 118 187" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Calves -->
+  <path id="calves" d="M82 310 Q78 350 80 390 L120 390 Q122 350 118 310" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Feet -->
+  <path id="feet" d="M75 392 Q72 410 78 415 L122 415 Q128 410 125 392" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Groin / Hip area -->
+  <path id="hips" d="M80 185 Q75 195 82 200 L118 200 Q125 195 120 185" stroke="#555" stroke-width="1.5" fill="none"/>
+</svg>

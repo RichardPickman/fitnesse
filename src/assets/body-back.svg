@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 500" fill="none">
+  <!-- Head / Neck -->
+  <ellipse id="head" cx="100" cy="35" rx="22" ry="26" stroke="#555" stroke-width="1.5"/>
+  <path id="neck" d="M90 58 Q100 68 110 58" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Traps -->
+  <path id="traps" d="M40 72 Q42 60 55 65 L145 65 Q158 60 160 72" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Rear Delts / Shoulders -->
+  <path id="rear-delts" d="M40 74 Q30 85 32 100 L48 98 Q46 85 55 74" stroke="#555" stroke-width="1.5" fill="none"/>
+  <path id="rear-delts-r" d="M160 74 Q170 85 168 100 L152 98 Q154 85 145 74" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Lats -->
+  <path id="lats" d="M55 74 Q50 110 55 140 L70 145 Q70 110 72 74" stroke="#555" stroke-width="1.5" fill="none"/>
+  <path id="lats-r" d="M145 74 Q150 110 145 140 L130 145 Q130 110 128 74" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Lower Back / Spinal Erectors -->
+  <path id="lower-back" d="M72 142 Q72 175 80 185 L120 185 Q128 175 128 142" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Triceps Left -->
+  <path id="triceps-l" d="M32 102 Q28 130 30 155 L46 153 Q44 130 48 100" stroke="#555" stroke-width="1.5" fill="none"/>
+  <!-- Triceps Right -->
+  <path id="triceps-r" d="M168 102 Q172 130 170 155 L154 153 Q156 130 152 100" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Forearms Left -->
+  <path id="forearms-l" d="M30 157 Q28 180 30 205 L46 203 Q44 180 46 155" stroke="#555" stroke-width="1.5" fill="none"/>
+  <!-- Forearms Right -->
+  <path id="forearms-r" d="M170 157 Q172 180 170 205 L154 203 Q156 180 154 155" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Hands Left -->
+  <path id="hands-l" d="M30 207 Q28 218 32 222 L44 220 Q46 214 46 205" stroke="#555" stroke-width="1.5" fill="none"/>
+  <!-- Hands Right -->
+  <path id="hands-r" d="M170 207 Q172 218 168 222 L156 220 Q154 214 154 205" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Glutes -->
+  <path id="glutes" d="M72 187 Q70 210 78 220 L122 220 Q130 210 128 187" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Hamstrings -->
+  <path id="hamstrings" d="M80 222 Q78 260 80 310 L120 310 Q122 260 120 222" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Calves -->
+  <path id="calves" d="M82 312 Q78 350 80 390 L120 390 Q122 350 118 312" stroke="#555" stroke-width="1.5" fill="none"/>
+
+  <!-- Feet -->
+  <path id="feet" d="M75 392 Q72 410 78 415 L122 415 Q128 410 125 392" stroke="#555" stroke-width="1.5" fill="none"/>
+</svg>
