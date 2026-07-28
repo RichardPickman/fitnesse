@@ -1,41 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 500" fill="none">
-  <!-- Head / Neck -->
-  <ellipse id="head" cx="100" cy="35" rx="22" ry="26" stroke="#555" stroke-width="1.5"/>
-  <path id="neck" d="M90 58 Q100 68 110 58" stroke="#555" stroke-width="1.5" fill="none"/>
-
+  <!-- Head -->
+  <path id="head" d="M78,12 C78,-2 122,-2 122,12 C122,28 112,38 108,42 C106,44 104,46 100,46 C96,46 94,44 92,42 C88,38 78,28 78,12 Z" stroke="#555" stroke-width="1.5"/>
+  <!-- Neck -->
+  <path id="neck" d="M88,46 L92,62 L108,62 L112,46 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Shoulders -->
-  <path id="shoulders" d="M40 72 Q42 65 55 68 L145 68 Q158 65 160 72" stroke="#555" stroke-width="1.5" fill="none"/>
-
+  <path id="shoulders" d="M38,70 C36,64 42,60 52,64 L148,64 C158,60 164,64 162,70 C160,76 152,80 145,78 L55,78 C48,80 40,76 38,70 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Chest -->
-  <path id="chest" d="M55 72 Q55 110 70 120 L130 120 Q145 110 145 72" stroke="#555" stroke-width="1.5" fill="none"/>
-
+  <path id="chest" d="M52,68 C52,90 58,108 68,118 L72,120 L128,120 L132,118 C142,108 148,90 148,68 C145,72 140,74 135,72 L65,72 C60,74 55,72 52,68 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Abs -->
-  <path id="abs" d="M72 122 Q72 170 80 185 L120 185 Q128 170 128 122" stroke="#555" stroke-width="1.5" fill="none"/>
-
+  <path id="abs" d="M74,122 C72,140 74,160 78,178 L80,184 L120,184 L122,178 C126,160 128,140 126,122 C120,126 115,128 110,126 L90,126 C85,128 80,126 74,122 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Biceps Left -->
-  <path id="biceps-l" d="M40 72 Q30 100 32 130 L48 128 Q46 100 55 72" stroke="#555" stroke-width="1.5" fill="none"/>
+  <path id="biceps-l" d="M38,70 C28,88 26,108 30,128 L34,132 L48,128 L50,124 C48,108 50,90 55,72 C50,74 44,74 38,70 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Biceps Right -->
-  <path id="biceps-r" d="M160 72 Q170 100 168 130 L152 128 Q154 100 145 72" stroke="#555" stroke-width="1.5" fill="none"/>
-
+  <path id="biceps-r" d="M162,70 C172,88 174,108 170,128 L166,132 L152,128 L150,124 C152,108 150,90 145,72 C150,74 156,74 162,70 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Forearms Left -->
-  <path id="forearms-l" d="M32 132 Q28 170 30 200 L46 198 Q44 170 48 130" stroke="#555" stroke-width="1.5" fill="none"/>
+  <path id="forearms-l" d="M30,132 C26,152 26,175 30,198 L34,202 L48,198 L50,194 C48,175 48,152 50,128 C46,130 40,132 34,132 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Forearms Right -->
-  <path id="forearms-r" d="M168 132 Q172 170 170 200 L154 198 Q156 170 152 130" stroke="#555" stroke-width="1.5" fill="none"/>
-
+  <path id="forearms-r" d="M170,132 C174,152 174,175 170,198 L166,202 L152,198 L150,194 C152,175 152,152 150,128 C154,130 160,132 166,132 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Hands Left -->
-  <path id="hands-l" d="M30 202 Q28 215 32 220 L44 218 Q46 210 46 200" stroke="#555" stroke-width="1.5" fill="none"/>
+  <path id="hands-l" d="M30,202 C26,212 28,220 34,224 L44,222 L48,218 C48,212 48,206 48,198 C44,200 38,202 34,202 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Hands Right -->
-  <path id="hands-r" d="M170 202 Q172 215 168 220 L156 218 Q154 210 154 200" stroke="#555" stroke-width="1.5" fill="none"/>
-
+  <path id="hands-r" d="M170,202 C174,212 172,220 166,224 L156,222 L152,218 C152,212 152,206 152,198 C156,200 162,202 166,202 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Quads -->
-  <path id="quads" d="M82 187 Q78 230 80 280 L120 280 Q122 230 118 187" stroke="#555" stroke-width="1.5" fill="none"/>
-
+  <path id="quads" d="M80,186 C76,210 76,240 78,270 L80,282 L120,282 L122,270 C124,240 124,210 120,186 C115,192 110,194 105,192 L95,192 C90,194 85,192 80,186 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Calves -->
-  <path id="calves" d="M82 310 Q78 350 80 390 L120 390 Q122 350 118 310" stroke="#555" stroke-width="1.5" fill="none"/>
-
+  <path id="calves" d="M80,310 C76,330 76,355 80,380 L82,392 L118,392 L120,380 C124,355 124,330 120,310 C115,316 110,318 105,316 L95,316 C90,318 85,316 80,310 Z" stroke="#555" stroke-width="1.5"/>
   <!-- Feet -->
-  <path id="feet" d="M75 392 Q72 410 78 415 L122 415 Q128 410 125 392" stroke="#555" stroke-width="1.5" fill="none"/>
-
-  <!-- Groin / Hip area -->
-  <path id="hips" d="M80 185 Q75 195 82 200 L118 200 Q125 195 120 185" stroke="#555" stroke-width="1.5" fill="none"/>
+  <path id="feet" d="M76,394 C72,406 74,416 80,420 L120,420 C126,416 128,406 124,394 C118,398 112,400 106,398 L94,398 C88,400 82,398 76,394 Z" stroke="#555" stroke-width="1.5"/>
+  <!-- Hips -->
+  <path id="hips" d="M78,184 C74,192 76,198 82,202 L118,202 C124,198 126,192 122,184 C116,188 110,190 104,188 L96,188 C90,190 84,188 78,184 Z" stroke="#555" stroke-width="1.5"/>
 </svg>

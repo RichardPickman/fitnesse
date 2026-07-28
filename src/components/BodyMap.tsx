@@ -23,34 +23,59 @@ interface ZonePath {
 }
 
 const ZONE_PATHS: ZonePath[] = [
-  // Front view
-  { id: 'head', d: 'M78,9 A22,26 0 1,1 122,9 A22,26 0 1,1 78,9', view: 'front' },
-  { id: 'neck', d: 'M90,58 Q100,68 110,58', view: 'front' },
-  { id: 'shoulders', d: 'M40,72 Q42,65 55,68 L145,68 Q158,65 160,72', view: 'front' },
-  { id: 'chest', d: 'M55,72 Q55,110 70,120 L130,120 Q145,110 145,72', view: 'front' },
-  { id: 'abs', d: 'M72,122 Q72,170 80,185 L120,185 Q128,170 128,122', view: 'front' },
-  { id: 'biceps-l', d: 'M40,72 Q30,100 32,130 L48,128 Q46,100 55,72', view: 'front' },
-  { id: 'biceps-r', d: 'M160,72 Q170,100 168,130 L152,128 Q154,100 145,72', view: 'front' },
-  { id: 'forearms-l', d: 'M32,132 Q28,170 30,200 L46,198 Q44,170 48,130', view: 'front' },
-  { id: 'forearms-r', d: 'M168,132 Q172,170 170,200 L154,198 Q156,170 152,130', view: 'front' },
-  { id: 'hands-l', d: 'M30,202 Q28,215 32,220 L44,218 Q46,210 46,200', view: 'front' },
-  { id: 'hands-r', d: 'M170,202 Q172,215 168,220 L156,218 Q154,210 154,200', view: 'front' },
-  { id: 'quads', d: 'M82,187 Q78,230 80,280 L120,280 Q122,230 118,187', view: 'front' },
-  { id: 'calves', d: 'M82,310 Q78,350 80,390 L120,390 Q122,350 118,310', view: 'front' },
-  { id: 'feet', d: 'M75,392 Q72,410 78,415 L122,415 Q128,410 125,392', view: 'front' },
-  { id: 'hips', d: 'M80,185 Q75,195 82,200 L118,200 Q125,195 120,185', view: 'front' },
+  // ── Front view ──────────────────────────────────────────────────────────
+  // Head — oval with jaw taper
+  { id: 'head', d: 'M78,12 C78,-2 122,-2 122,12 C122,28 112,38 108,42 C106,44 104,46 100,46 C96,46 94,44 92,42 C88,38 78,28 78,12 Z', view: 'front' },
+  // Neck — trapezius connection
+  { id: 'neck', d: 'M88,46 L92,62 L108,62 L112,46 Z', view: 'front' },
+  // Shoulders — rounded deltoid caps
+  { id: 'shoulders', d: 'M38,70 C36,64 42,60 52,64 L148,64 C158,60 164,64 162,70 C160,76 152,80 145,78 L55,78 C48,80 40,76 38,70 Z', view: 'front' },
+  // Chest — pectoral volume, wider at top tapering to sternum
+  { id: 'chest', d: 'M52,68 C52,90 58,108 68,118 L72,120 L128,120 L132,118 C142,108 148,90 148,68 C145,72 140,74 135,72 L65,72 C60,74 55,72 52,68 Z', view: 'front' },
+  // Abs — segmented rectangular block with slight taper
+  { id: 'abs', d: 'M74,122 C72,140 74,160 78,178 L80,184 L120,184 L122,178 C126,160 128,140 126,122 C120,126 115,128 110,126 L90,126 C85,128 80,126 74,122 Z', view: 'front' },
+  // Biceps Left — curved arm volume
+  { id: 'biceps-l', d: 'M38,70 C28,88 26,108 30,128 L34,132 L48,128 L50,124 C48,108 50,90 55,72 C50,74 44,74 38,70 Z', view: 'front' },
+  // Biceps Right
+  { id: 'biceps-r', d: 'M162,70 C172,88 174,108 170,128 L166,132 L152,128 L150,124 C152,108 150,90 145,72 C150,74 156,74 162,70 Z', view: 'front' },
+  // Forearms Left — narrower than biceps
+  { id: 'forearms-l', d: 'M30,132 C26,152 26,175 30,198 L34,202 L48,198 L50,194 C48,175 48,152 50,128 C46,130 40,132 34,132 Z', view: 'front' },
+  // Forearms Right
+  { id: 'forearms-r', d: 'M170,132 C174,152 174,175 170,198 L166,202 L152,198 L150,194 C152,175 152,152 150,128 C154,130 160,132 166,132 Z', view: 'front' },
+  // Hands Left
+  { id: 'hands-l', d: 'M30,202 C26,212 28,220 34,224 L44,222 L48,218 C48,212 48,206 48,198 C44,200 38,202 34,202 Z', view: 'front' },
+  // Hands Right
+  { id: 'hands-r', d: 'M170,202 C174,212 172,220 166,224 L156,222 L152,218 C152,212 152,206 152,198 C156,200 162,202 166,202 Z', view: 'front' },
+  // Quads — teardrop shapes
+  { id: 'quads', d: 'M80,186 C76,210 76,240 78,270 L80,282 L120,282 L122,270 C124,240 124,210 120,186 C115,192 110,194 105,192 L95,192 C90,194 85,192 80,186 Z', view: 'front' },
+  // Calves — diamond/teardrop shapes
+  { id: 'calves', d: 'M80,310 C76,330 76,355 80,380 L82,392 L118,392 L120,380 C124,355 124,330 120,310 C115,316 110,318 105,316 L95,316 C90,318 85,316 80,310 Z', view: 'front' },
+  // Feet
+  { id: 'feet', d: 'M76,394 C72,406 74,416 80,420 L120,420 C126,416 128,406 124,394 C118,398 112,400 106,398 L94,398 C88,400 82,398 76,394 Z', view: 'front' },
+  // Hips / groin area
+  { id: 'hips', d: 'M78,184 C74,192 76,198 82,202 L118,202 C124,198 126,192 122,184 C116,188 110,190 104,188 L96,188 C90,190 84,188 78,184 Z', view: 'front' },
 
-  // Back view
-  { id: 'traps', d: 'M40,72 Q42,60 55,65 L145,65 Q158,60 160,72', view: 'back' },
-  { id: 'rear-delts', d: 'M40,74 Q30,85 32,100 L48,98 Q46,85 55,74', view: 'back' },
-  { id: 'rear-delts-r', d: 'M160,74 Q170,85 168,100 L152,98 Q154,85 145,74', view: 'back' },
-  { id: 'lats', d: 'M55,74 Q50,110 55,140 L70,145 Q70,110 72,74', view: 'back' },
-  { id: 'lats-r', d: 'M145,74 Q150,110 145,140 L130,145 Q130,110 128,74', view: 'back' },
-  { id: 'lower-back', d: 'M72,142 Q72,175 80,185 L120,185 Q128,175 128,142', view: 'back' },
-  { id: 'triceps-l', d: 'M32,102 Q28,130 30,155 L46,153 Q44,130 48,100', view: 'back' },
-  { id: 'triceps-r', d: 'M168,102 Q172,130 170,155 L154,153 Q156,130 152,100', view: 'back' },
-  { id: 'glutes', d: 'M72,187 Q70,210 78,220 L122,220 Q130,210 128,187', view: 'back' },
-  { id: 'hamstrings', d: 'M80,222 Q78,260 80,310 L120,310 Q122,260 120,222', view: 'back' },
+  // ── Back view ───────────────────────────────────────────────────────────
+  // Traps — diamond-shaped upper back
+  { id: 'traps', d: 'M38,70 C42,58 50,54 60,58 L140,58 C150,54 158,58 162,70 C155,66 148,64 140,66 L60,66 C52,64 45,66 38,70 Z', view: 'back' },
+  // Rear Delts Left
+  { id: 'rear-delts', d: 'M38,72 C28,82 26,98 30,112 L34,116 L48,112 L50,108 C48,98 50,84 55,74 C50,76 44,76 38,72 Z', view: 'back' },
+  // Rear Delts Right
+  { id: 'rear-delts-r', d: 'M162,72 C172,82 174,98 170,112 L166,116 L152,112 L150,108 C152,98 150,84 145,74 C150,76 156,76 162,72 Z', view: 'back' },
+  // Lats Left — wing-shaped flare
+  { id: 'lats', d: 'M55,72 C48,90 46,110 50,132 L54,142 L70,146 L72,140 C72,120 74,100 72,78 C68,80 62,80 55,72 Z', view: 'back' },
+  // Lats Right
+  { id: 'lats-r', d: 'M145,72 C152,90 154,110 150,132 L146,142 L130,146 L128,140 C128,120 126,100 128,78 C132,80 138,80 145,72 Z', view: 'back' },
+  // Lower back / spinal erectors
+  { id: 'lower-back', d: 'M74,144 C72,160 74,175 78,184 L80,186 L120,186 L122,184 C126,175 128,160 126,144 C120,148 115,150 110,148 L90,148 C85,150 80,148 74,144 Z', view: 'back' },
+  // Triceps Left — horseshoe shape
+  { id: 'triceps-l', d: 'M30,116 C26,132 26,150 30,164 L34,168 L48,164 L50,160 C48,150 48,132 50,112 C46,114 40,116 34,116 Z', view: 'back' },
+  // Triceps Right
+  { id: 'triceps-r', d: 'M170,116 C174,132 174,150 170,164 L166,168 L152,164 L150,160 C152,150 152,132 150,112 C154,114 160,116 166,116 Z', view: 'back' },
+  // Glutes — rounded oval volume
+  { id: 'glutes', d: 'M74,188 C70,206 72,218 80,224 L120,224 C128,218 130,206 126,188 C120,194 114,196 108,194 L92,194 C86,196 80,194 74,188 Z', view: 'back' },
+  // Hamstrings — elongated rear thigh
+  { id: 'hamstrings', d: 'M80,226 C76,250 76,275 78,300 L80,312 L120,312 L122,300 C124,275 124,250 120,226 C115,232 110,234 105,232 L95,232 C90,234 85,232 80,226 Z', view: 'back' },
 ];
 
 // ---------------------------------------------------------------------------
