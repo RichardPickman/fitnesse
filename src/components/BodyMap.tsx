@@ -8,6 +8,7 @@ import {
 import Svg, { Path } from 'react-native-svg';
 import { BODY_OUTLINE_IDS, MUSCLE_PATHS } from '../assets/body-paths';
 import { colors, spacing, typography } from '../theme';
+import { softCap } from '../utils/computeBodyMapIntensity';
 import { SVG_ID_TO_ZONE_KEY } from '../utils/muscle-mapping';
 
 // ---------------------------------------------------------------------------
@@ -26,18 +27,94 @@ interface BodyMapProps {
 }
 
 // ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+/** Gradient stops used by both `intensityToColor` and the legend */
+const GRADIENT_STOPS: [number, [number, number, number]][] = [
+  [0.0, [59, 130, 246]],   // blue
+  [0.3, [74, 222, 128]],   // green
+  [0.6, [250, 204, 21]],   // yellow
+  [1.0, [239, 68, 68]],    // red
+];
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-function intensityToColor(intensity: number): string {
-  if (intensity <= 0) {
+/**
+ * Map a raw intensity to a blue→green→red gradient.
+ *
+ * First applies soft-cap to get a 0–1 display value, then interpolates
+ * through the GRADIENT_STOPS.
+ */
+function intensityToColor(rawIntensity: number): string {
+  if (rawIntensity <= 0) {
     return 'transparent';
   }
-  // Scale from transparent to accent color
-  const alpha = Math.min(intensity * 0.6, 0.6);
 
-  return `rgba(74, 222, 128, ${alpha})`;
+  const t = softCap(rawIntensity);
+
+  return interpolateColor(t);
 }
+
+/**
+ * Interpolate a 0–1 value through the gradient stops.
+ */
+function interpolateColor(t: number): string {
+  const stops = GRADIENT_STOPS;
+
+  // Find the two stops we're between
+  let lower = stops[0];
+  let upper = stops[stops.length - 1];
+
+  for (let i = 0; i < stops.length - 1; i++) {
+    if (t >= stops[i][0] && t <= stops[i + 1][0]) {
+      lower = stops[i];
+      upper = stops[i + 1];
+      break;
+    }
+  }
+
+  // Interpolate between lower and upper
+  const range = upper[0] - lower[0];
+  const fraction = range === 0 ? 0 : (t - lower[0]) / range;
+
+  const r = Math.round(lower[1][0] + (upper[1][0] - lower[1][0]) * fraction);
+  const g = Math.round(lower[1][1] + (upper[1][1] - lower[1][1]) * fraction);
+  const b = Math.round(lower[1][2] + (upper[1][2] - lower[1][2]) * fraction);
+
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+// ---------------------------------------------------------------------------
+// Gradient Legend
+// ---------------------------------------------------------------------------
+
+const LEGEND_BAR_SEGMENTS = 20;
+
+const GradientLegend = () => {
+  const segments = Array.from({ length: LEGEND_BAR_SEGMENTS }, (_, i) => {
+    const t = i / (LEGEND_BAR_SEGMENTS - 1);
+
+    return { key: i, color: interpolateColor(t) };
+  });
+
+  return (
+    <View style={styles.legendContainer}>
+      <Text style={styles.legendLabel}>Low</Text>
+      <View style={styles.legendBar}>
+        {segments.map((seg) => (
+          <View
+            key={seg.key}
+            style={[styles.legendSegment, { backgroundColor: seg.color }]}
+          />
+        ))}
+      </View>
+      <Text style={styles.legendLabel}>High</Text>
+    </View>
+  );
+};
 
 // ---------------------------------------------------------------------------
 // Body SVG component
@@ -104,6 +181,7 @@ export const BodyMap = ({
       {!hasIntensity && (
         <Text style={styles.hint}>Add exercises to see muscle highlights</Text>
       )}
+      <GradientLegend />
     </View>
   );
 
@@ -171,5 +249,27 @@ const styles = StyleSheet.create({
   chevron: {
     fontSize: 12,
     color: colors.textSecondary,
+  },
+  legendContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.xl,
+    gap: spacing.sm,
+  },
+  legendBar: {
+    flex: 1,
+    flexDirection: 'row',
+    height: 8,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  legendSegment: {
+    flex: 1,
+  },
+  legendLabel: {
+    ...typography.caption,
+    fontSize: 11,
+    color: colors.textMuted,
   },
 });
