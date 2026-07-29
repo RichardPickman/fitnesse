@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { BODY_OUTLINE_IDS, MUSCLE_PATHS } from '../assets/body-paths';
 import { colors, spacing, typography } from '../theme';
@@ -11,6 +17,12 @@ import { SVG_ID_TO_ZONE_KEY } from '../utils/muscle-mapping';
 interface BodyMapProps {
   /** Zone key → intensity 0–1 (0 = no highlight, 1 = full highlight) */
   muscleIntensity?: Record<string, number>;
+  /** Show as collapsible accordion (default: false) */
+  collapsible?: boolean;
+  /** Start expanded when collapsible (default: true) */
+  defaultExpanded?: boolean;
+  /** Width of each body view (front/back) in px (default: 140) */
+  size?: number;
 }
 
 // ---------------------------------------------------------------------------
@@ -68,24 +80,48 @@ const BodySvg = ({ view, muscleIntensity, size }: BodySvgProps) => {
 // Main component
 // ---------------------------------------------------------------------------
 
-export const BodyMap = ({ muscleIntensity = {} }: BodyMapProps) => {
+export const BodyMap = ({
+  muscleIntensity = {},
+  collapsible = false,
+  defaultExpanded = false,
+  size = 140,
+}: BodyMapProps) => {
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const hasIntensity = Object.values(muscleIntensity).some((v) => v > 0);
 
-  return (
-    <View style={styles.container}>
+  const content = (
+    <View style={styles.content}>
       <View style={styles.row}>
         <View style={styles.figure}>
-          <BodySvg view="front" muscleIntensity={muscleIntensity} size={140} />
+          <BodySvg view="front" muscleIntensity={muscleIntensity} size={size} />
           <Text style={styles.label}>Front</Text>
         </View>
         <View style={styles.figure}>
-          <BodySvg view="back" muscleIntensity={muscleIntensity} size={140} />
+          <BodySvg view="back" muscleIntensity={muscleIntensity} size={size} />
           <Text style={styles.label}>Back</Text>
         </View>
       </View>
       {!hasIntensity && (
         <Text style={styles.hint}>Add exercises to see muscle highlights</Text>
       )}
+    </View>
+  );
+
+  if (!collapsible) {
+    return <View style={styles.container}>{content}</View>;
+  }
+
+  return (
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={styles.accordionHeader}
+        onPress={() => setExpanded((prev) => !prev)}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.accordionTitle}>Muscle Map</Text>
+        <Text style={styles.chevron}>{expanded ? '▼' : '▶'}</Text>
+      </TouchableOpacity>
+      {expanded && content}
     </View>
   );
 };
@@ -97,7 +133,10 @@ export const BodyMap = ({ muscleIntensity = {} }: BodyMapProps) => {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  content: {
+    alignItems: 'center',
   },
   row: {
     flexDirection: 'row',
@@ -116,5 +155,21 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginTop: spacing.sm,
     fontStyle: 'italic',
+  },
+  accordionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+  },
+  accordionTitle: {
+    ...typography.subtitle,
+    fontSize: 15,
+  },
+  chevron: {
+    fontSize: 12,
+    color: colors.textSecondary,
   },
 });
