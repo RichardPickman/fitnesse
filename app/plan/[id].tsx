@@ -1,22 +1,25 @@
+import { BodyMap } from '@/components/BodyMap';
+import type { Exercise } from '@/db/exercises';
 import { DAY_LABELS, type PlanWithDays } from '@/db/plans';
 import { useExerciseStore } from '@/stores/exerciseStore';
 import { usePlanStore } from '@/stores/planStore';
 import { colors, spacing, typography } from '@/theme';
+import { computeBodyMapIntensity } from '@/utils/computeBodyMapIntensity';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 export default function PlanDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { plans, loadPlans, removePlan } = usePlanStore();
-  const { exercises } = useExerciseStore();
+  const { exercises, muscleGroups, mappings } = useExerciseStore();
   const plan = plans.find((p) => p.plan.id === id) ?? null;
 
   // Reload on focus in case edits happened
@@ -31,7 +34,7 @@ export default function PlanDetailScreen() {
       <View style={styles.container}>
         <View style={styles.emptyState}>
           <Text style={styles.emptyText}>Plan not found</Text>
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={router.back}>
             <Text style={styles.backLink}>Go back</Text>
           </TouchableOpacity>
         </View>
@@ -65,7 +68,7 @@ export default function PlanDetailScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={router.back}>
           <Text style={styles.backButton}>← Plans</Text>
         </TouchableOpacity>
         <View style={styles.headerActions}>
@@ -105,6 +108,23 @@ export default function PlanDetailScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
+
+            {/* Body map for this day */}
+            {day.entries.length > 0 && (
+              <BodyMap
+                collapsible
+                muscleIntensity={
+                  computeBodyMapIntensity(
+                    day.entries
+                      .map((e) => exercises.find((ex) => ex.id === e.exercise_id))
+                      .filter((ex): ex is Exercise => ex != null),
+                    muscleGroups,
+                    mappings,
+                  ).muscleIntensity
+                }
+              />
+            )}
+
             {day.entries.length > 0 ? (
               <View style={styles.exerciseList}>
                 {day.entries.map((entry) => (

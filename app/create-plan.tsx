@@ -52,7 +52,7 @@ export default function CreatePlanScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={router.back}>
           <Text style={styles.cancel}>Cancel</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>New Plan</Text>

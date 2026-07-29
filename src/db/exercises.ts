@@ -12,7 +12,9 @@ export interface MuscleGroup {
   svg_zone_key: string | null;
   sort_order: number;
 }
-
+/**
+ * Type for exercise instance, consisting: `name` `description` `equipment` `difficulty` `illustration url` `timestamps`
+ */
 export interface Exercise {
   id: string;
   name: string;
@@ -24,6 +26,9 @@ export interface Exercise {
   updated_at: string;
 }
 
+/**
+ * Muscle group with `primary` or `secondary` role in exercise
+ */
 export interface MuscleMapping {
   exercise_id: string;
   muscle_group_id: string;
