@@ -1,9 +1,9 @@
 import { BodyMap } from '@/components/BodyMap';
 import { DAY_LABELS, type PlanWithDays } from '@/db/plans';
-import { computeBodyMapIntensity } from '@/hooks/useBodyMapIntensity';
 import { useExerciseStore } from '@/stores/exerciseStore';
 import { usePlanStore } from '@/stores/planStore';
 import { colors, spacing, typography } from '@/theme';
+import { computeBodyMapIntensity } from '@/utils/computeBodyMapIntensity';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
