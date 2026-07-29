@@ -53,6 +53,7 @@ export default function DayEditorScreen() {
     loadInitialData,
   } = useDayEditorState({
     dayId: dayId ?? '',
+    exercises,
     muscleGroups,
     mappings,
   });

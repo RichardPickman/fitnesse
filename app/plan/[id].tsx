@@ -1,4 +1,5 @@
 import { BodyMap } from '@/components/BodyMap';
+import type { Exercise } from '@/db/exercises';
 import { DAY_LABELS, type PlanWithDays } from '@/db/plans';
 import { useExerciseStore } from '@/stores/exerciseStore';
 import { usePlanStore } from '@/stores/planStore';
@@ -114,7 +115,9 @@ export default function PlanDetailScreen() {
                 collapsible
                 muscleIntensity={
                   computeBodyMapIntensity(
-                    day.entries.map((e) => e.exercise_id),
+                    day.entries
+                      .map((e) => exercises.find((ex) => ex.id === e.exercise_id))
+                      .filter((ex): ex is Exercise => ex != null),
                     muscleGroups,
                     mappings,
                   ).muscleIntensity
