@@ -1,22 +1,24 @@
+import { BodyMap } from '@/components/BodyMap';
 import { DAY_LABELS, type PlanWithDays } from '@/db/plans';
+import { computeBodyMapIntensity } from '@/hooks/useBodyMapIntensity';
 import { useExerciseStore } from '@/stores/exerciseStore';
 import { usePlanStore } from '@/stores/planStore';
 import { colors, spacing, typography } from '@/theme';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useState } from 'react';
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 export default function PlanDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { plans, loadPlans, removePlan } = usePlanStore();
-  const { exercises } = useExerciseStore();
+  const { exercises, muscleGroups, mappings } = useExerciseStore();
   const plan = plans.find((p) => p.plan.id === id) ?? null;
 
   // Reload on focus in case edits happened
@@ -105,6 +107,20 @@ export default function PlanDetailScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
+
+            {/* Body map for this day */}
+            {day.entries.length > 0 && (
+              <BodyMap
+                muscleIntensity={
+                  computeBodyMapIntensity(
+                    day.entries.map((e) => e.exercise_id),
+                    muscleGroups,
+                    mappings,
+                  ).muscleIntensity
+                }
+              />
+            )}
+
             {day.entries.length > 0 ? (
               <View style={styles.exerciseList}>
                 {day.entries.map((entry) => (
