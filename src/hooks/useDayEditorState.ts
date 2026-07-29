@@ -21,6 +21,7 @@ interface PendingConfig {
 
 interface UseDayEditorStateOptions {
   dayId: string;
+  exercises: Exercise[];
   muscleGroups: MuscleGroup[];
   mappings: MuscleMapping[];
 }
@@ -90,6 +91,7 @@ export function useMuscleSearch({ exercises, mappings }: MuscleSearchProps) {
 
 export function useDayEditorState({
   dayId,
+  exercises,
   muscleGroups,
   mappings,
 }: UseDayEditorStateOptions): UseDayEditorStateReturn {
@@ -116,13 +118,18 @@ export function useDayEditorState({
 
   // Compute body map intensity from local selection
   const bodyMapIntensity = useMemo(
-    () =>
-      computeBodyMapIntensity(
-        selectedIds,
+    () => {
+      const selectedExercises = exercises.filter((ex) =>
+        selectedIds.includes(ex.id),
+      );
+
+      return computeBodyMapIntensity(
+        selectedExercises,
         muscleGroups,
         mappings,
-      ).muscleIntensity,
-    [selectedIds, muscleGroups, mappings],
+      ).muscleIntensity;
+    },
+    [selectedIds, exercises, muscleGroups, mappings],
   );
 
   // Check if an exercise is currently selected
