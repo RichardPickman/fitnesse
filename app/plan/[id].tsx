@@ -111,6 +111,7 @@ export default function PlanDetailScreen() {
             {/* Body map for this day */}
             {day.entries.length > 0 && (
               <BodyMap
+                collapsible
                 muscleIntensity={
                   computeBodyMapIntensity(
                     day.entries.map((e) => e.exercise_id),
