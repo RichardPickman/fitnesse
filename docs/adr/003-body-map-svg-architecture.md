@@ -39,18 +39,22 @@ body-back.svg  ─┘                                              │
 ### Data Flow
 
 1. `useExerciseStore` loads exercises, muscle groups, and mappings from Supabase.
-2. A new hook `computeBodyMapIntensity` (or inline logic) takes a list of exercise IDs and computes intensity per zone key:
-   - For each exercise, look up its primary/secondary muscle groups.
-   - Map each muscle group's `svg_zone_key` to granular SVG IDs via `ZONE_KEY_TO_SVG_IDS`.
-   - Aggregate: primary = intensity 1.0, secondary = intensity 0.5.
-3. `BodyMap` receives `muscleIntensity: Record<string, number>` (zone key → 0–1).
-4. For each SVG path, look up its zone key via `SVG_ID_TO_ZONE_KEY`, get the intensity, compute fill color.
+2. `computeBodyMapIntensity` takes a list of **full Exercise objects** (not just IDs) and computes raw intensity per zone key:
+   - For each exercise, look up its `difficulty` → weight (beginner: 0.3, intermediate: 0.6, advanced: 1.0).
+   - For each muscle mapping, apply role multiplier (primary: 1.0, secondary: 0.5).
+   - **Sum** intensities across multiple exercises targeting the same zone (stacking).
+3. The raw intensity is unbounded. `BodyMap` applies a **soft-cap** (`1 - 1/(raw + 1)`) to map it to a 0–1 display value.
+4. For each SVG path, look up its zone key via `SVG_ID_TO_ZONE_KEY`, get the intensity, compute fill color via a **blue→green→red gradient**.
 5. Render front and back views side by side.
 
 ### Coloring
 
 - Intensity 0 → transparent (no highlight).
-- Intensity > 0 → `rgba(74, 222, 128, alpha)` where `alpha = min(intensity * 0.6, 0.6)`.
+- Intensity > 0 → soft-capped, then mapped through a 4-stop gradient:
+  - 0.00 → blue   (rgb 59, 130, 246)
+  - 0.30 → green  (rgb 74, 222, 128)
+  - 0.60 → yellow (rgb 250, 204, 21)
+  - 1.00 → red    (rgb 239, 68, 68)
 - The body outline paths (`id="body"`) are always rendered with `stroke="#484a68"` and no fill.
 
 ## Consequences
