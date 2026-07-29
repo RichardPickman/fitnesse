@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import { colors, spacing, typography } from '../../../src/theme';
-import { usePlanStore } from '../../../src/stores/planStore';
+import { useEffect, useState } from 'react';
+import {
+    Alert,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
+} from 'react-native';
 import { DAY_LABELS, DAY_LABELS_FULL } from '../../../src/db/plans';
+import { usePlanStore } from '../../../src/stores/planStore';
+import { colors, spacing, typography } from '../../../src/theme';
 
 export default function EditPlanScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -73,7 +73,7 @@ export default function EditPlanScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={router.back}>
           <Text style={styles.cancel}>Cancel</Text>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Edit Plan</Text>
