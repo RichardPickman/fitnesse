@@ -33,7 +33,7 @@ export default function PlanDetailScreen() {
       <View style={styles.container}>
         <View style={styles.emptyState}>
           <Text style={styles.emptyText}>Plan not found</Text>
-          <TouchableOpacity onPress={() => router.back()}>
+          <TouchableOpacity onPress={router.back}>
             <Text style={styles.backLink}>Go back</Text>
           </TouchableOpacity>
         </View>
@@ -67,7 +67,7 @@ export default function PlanDetailScreen() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={router.back}>
           <Text style={styles.backButton}>← Plans</Text>
         </TouchableOpacity>
         <View style={styles.headerActions}>
