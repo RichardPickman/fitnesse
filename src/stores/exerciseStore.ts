@@ -10,8 +10,9 @@ import {
   type SyncProgress,
 } from '../db/exercises/types';
 
-import { seedIfEmpty, syncExercisesFromCloud } from '@/db/exercises/exercises';
+import { syncExercisesFromCloud } from '@/db/exercises/exercises';
 import { getLastSyncedAt } from '@/db/exercises/model/metadata';
+import { seedIfEmpty } from '@/db/exercises/model/upsert';
 import { SEED_MUSCLE_GROUPS } from '../db/seed-exercises';
 
 // ---------------------------------------------------------------------------
