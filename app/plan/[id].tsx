@@ -1,5 +1,5 @@
 import { BodyMap } from '@/components/BodyMap';
-import type { Exercise } from '@/db/exercises';
+import type { Exercise } from '@/db/exercises/types';
 import { DAY_LABELS, type PlanWithDays } from '@/db/plans';
 import { useExerciseStore } from '@/stores/exerciseStore';
 import { usePlanStore } from '@/stores/planStore';
