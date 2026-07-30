@@ -100,6 +100,7 @@ export async function initDatabase(): Promise<SQLite.SQLiteDatabase> {
       equipment_tags   TEXT DEFAULT '[]',
       difficulty       TEXT,
       illustration_url TEXT,
+      updated_at       TEXT NOT NULL DEFAULT '',
       cached_at        TEXT DEFAULT (datetime('now'))
     );
   `);
@@ -112,6 +113,25 @@ export async function initDatabase(): Promise<SQLite.SQLiteDatabase> {
       PRIMARY KEY (exercise_id, muscle_group_id, role)
     );
   `);
+
+  // App metadata key-value store (e.g. last_synced_at)
+  await db.execAsync(`
+    CREATE TABLE IF NOT EXISTS app_metadata (
+      key   TEXT PRIMARY KEY,
+      value TEXT NOT NULL
+    );
+  `);
+
+  // --- Migrations for existing databases ---
+
+  // v1→v2: Add `updated_at` column to cached_exercises (missing in old schema)
+  try {
+    await db.execAsync(
+      `ALTER TABLE cached_exercises ADD COLUMN updated_at TEXT DEFAULT ''`,
+    );
+  } catch {
+    // Column already exists — safe to ignore
+  }
 
   return db;
 }
