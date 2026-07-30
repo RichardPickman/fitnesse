@@ -1,67 +1,10 @@
-import { supabase } from '../../supabase/client';
-import { getDb } from '../local';
-import {
-  SEED_EXERCISES,
-  SEED_MAPPINGS,
-} from '../seed-exercises';
 import { fetchAllChunks, fetchExerciseChunk, fetchMappingChunk } from './api';
 import { countChangedExercises, countChangedMappings } from './api/counters';
 import { getLastSyncedAt, setLastSyncedAt } from './model/metadata';
 import { upsertExercises, upsertMappings } from './model/upsert';
 import { SyncProgress } from './types';
 
-// ---------------------------------------------------------------------------
-// Seed: populate local DB from hardcoded bundle on first launch
-// ---------------------------------------------------------------------------
 
-export async function seedIfEmpty(): Promise<void> {
-  const db = await getDb();
-  const row = await db.getFirstAsync<{ count: number }>(
-    'SELECT COUNT(*) AS count FROM cached_exercises',
-  );
-
-  if (row && row.count > 0) {
-    return; // already seeded
-  }
-
-  console.log('[exercises] Seeding local DB from hardcoded bundle');
-
-  // Seed exercises
-  const exStmt = await db.prepareAsync(
-    `INSERT OR REPLACE INTO cached_exercises (id, name, description, equipment_tags, difficulty, illustration_url, updated_at, cached_at)
-     VALUES ($id, $name, $description, $tags, $difficulty, $illustration, $updatedAt, datetime('now'))`,
-  );
-
-  for (const ex of SEED_EXERCISES) {
-    await exStmt.executeAsync({
-      $id: ex.id,
-      $name: ex.name,
-      $description: ex.description,
-      $tags: JSON.stringify(ex.equipment_tags),
-      $difficulty: ex.difficulty,
-      $illustration: ex.illustration_url,
-      $updatedAt: ex.updated_at,
-    });
-  }
-
-  await exStmt.finalizeAsync();
-
-  // Seed mappings
-  const mapStmt = await db.prepareAsync(
-    `INSERT OR REPLACE INTO cached_muscle_mappings (exercise_id, muscle_group_id, role)
-     VALUES ($eid, $mgid, $role)`,
-  );
-
-  for (const m of SEED_MAPPINGS) {
-    await mapStmt.executeAsync({
-      $eid: m.exercise_id,
-      $mgid: m.muscle_group_id,
-      $role: m.role,
-    });
-  }
-
-  await mapStmt.finalizeAsync();
-}
 
 // ---------------------------------------------------------------------------
 // Delta sync from Supabase — count-first, chunked, parallel
