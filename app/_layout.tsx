@@ -49,6 +49,13 @@ export default function RootLayout() {
           name="workout/complete"
           options={{ animation: 'fade' }}
         />
+        <Stack.Screen
+          name="sync"
+          options={{
+            presentation: 'modal',
+            animation: 'slide_from_bottom',
+          }}
+        />
       </Stack>
     </>
   );
