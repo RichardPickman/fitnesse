@@ -48,7 +48,16 @@ export default function PlansScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Plans</Text>
+      <View style={styles.headerRow}>
+        <Text style={styles.title}>Plans</Text>
+        <TouchableOpacity
+          style={styles.syncButton}
+          activeOpacity={0.7}
+          onPress={() => router.push('/sync')}
+        >
+          <Text style={styles.syncButtonText}>Sync</Text>
+        </TouchableOpacity>
+      </View>
 
       {status === 'loading' && plans.length === 0 && (
         <View style={styles.emptyState}>
@@ -112,9 +121,27 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: 60,
   },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: spacing.xl,
+  },
   title: {
     ...typography.title,
-    marginBottom: spacing.xl,
+  },
+  syncButton: {
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  syncButtonText: {
+    ...typography.caption,
+    color: colors.accent,
+    fontWeight: '600',
   },
   emptyState: {
     flex: 1,
