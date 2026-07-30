@@ -42,8 +42,60 @@ CREATE TABLE IF NOT EXISTS exercise_muscle_mapping (
   exercise_id      UUID REFERENCES exercises(id) ON DELETE CASCADE,
   muscle_group_id  UUID REFERENCES muscle_groups(id) ON DELETE CASCADE,
   role             TEXT NOT NULL CHECK (role IN ('primary', 'secondary')),
+  updated_at       TIMESTAMPTZ DEFAULT now(),
   PRIMARY KEY (exercise_id, muscle_group_id, role)
 );
+
+-- -----------------------------------------------------------
+-- 1b. Migration: add updated_at to existing exercise_muscle_mapping
+-- -----------------------------------------------------------
+
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'exercise_muscle_mapping' AND column_name = 'updated_at'
+  ) THEN
+    ALTER TABLE exercise_muscle_mapping ADD COLUMN updated_at TIMESTAMPTZ DEFAULT now();
+  END IF;
+END $$;
+
+-- Backfill any existing rows that have NULL updated_at
+UPDATE exercise_muscle_mapping SET updated_at = now() WHERE updated_at IS NULL;
+
+-- -----------------------------------------------------------
+-- 1c. Triggers: auto-bump updated_at on mapping changes
+-- -----------------------------------------------------------
+
+-- Bump the mapping's own updated_at on any change
+CREATE OR REPLACE FUNCTION bump_mapping_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = now();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_mapping_updated_at ON exercise_muscle_mapping;
+CREATE TRIGGER trg_mapping_updated_at
+  BEFORE UPDATE ON exercise_muscle_mapping
+  FOR EACH ROW EXECUTE FUNCTION bump_mapping_updated_at();
+
+-- Bump the parent exercise's updated_at when its mappings change,
+-- so delta sync picks up the exercise on next sync.
+CREATE OR REPLACE FUNCTION bump_exercise_on_mapping_change()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE exercises SET updated_at = now()
+  WHERE id = COALESCE(NEW.exercise_id, OLD.exercise_id);
+  RETURN COALESCE(NEW, OLD);
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS trg_exercise_bump_on_mapping ON exercise_muscle_mapping;
+CREATE TRIGGER trg_exercise_bump_on_mapping
+  AFTER INSERT OR UPDATE OR DELETE ON exercise_muscle_mapping
+  FOR EACH ROW EXECUTE FUNCTION bump_exercise_on_mapping_change();
 
 -- -----------------------------------------------------------
 -- 2. RLS: Public read-only (no auth needed)
