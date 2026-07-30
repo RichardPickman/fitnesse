@@ -1,4 +1,4 @@
-import type { Exercise, MuscleGroup, MuscleMapping } from '../db/exercises';
+import type { Exercise, MuscleGroup, MuscleMapping } from '../db/exercises/types';
 
 // ---------------------------------------------------------------------------
 // Types
