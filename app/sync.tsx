@@ -13,6 +13,14 @@ import {
 // Component
 // ---------------------------------------------------------------------------
 
+const phases = {
+  counting: 'Checking for updates...',
+  exercises: 'Downloading exercises...',
+  mappings: 'Downloading muscle mappings...',
+  saving: 'Saving to local database...',
+  done: 'Complete!',
+};
+
 export default function SyncScreen() {
   const {
     exercises,
@@ -33,6 +41,10 @@ export default function SyncScreen() {
     syncProgress && syncProgress.total
       ? Math.round((syncProgress.current / syncProgress.total) * 100)
       : null;
+
+  const phaseLabel = syncProgress?.phase
+    ? phases[syncProgress.phase]
+    : null;
 
   return (
     <View style={styles.container}>
@@ -73,12 +85,12 @@ export default function SyncScreen() {
           <Text style={styles.progressText}>
             {progressPercent !== null
               ? `Syncing... ${progressPercent}%`
-              : 'Fetching exercises...'}
+              : phaseLabel ?? 'Syncing...'}
           </Text>
-          {syncProgress && (
+          {syncProgress && syncProgress.phase !== 'counting' && (
             <Text style={styles.progressDetail}>
-              {syncProgress.current} exercise
-              {syncProgress.current !== 1 ? 's' : ''} received
+              {syncProgress.current} / {syncProgress.total} item
+              {syncProgress.total !== 1 ? 's' : ''}
             </Text>
           )}
         </View>
