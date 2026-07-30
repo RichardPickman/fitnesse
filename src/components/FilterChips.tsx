@@ -1,4 +1,4 @@
-import type { MuscleGroup } from '@/db/exercises';
+import type { MuscleGroup } from '@/db/exercises/types';
 import { colors, spacing, typography } from '@/theme';
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
 

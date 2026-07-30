@@ -1,4 +1,4 @@
-import type { Exercise } from '@/db/exercises';
+import type { Exercise } from '@/db/exercises/types';
 import type { PlanExerciseEntry } from '@/db/plans';
 import { colors, spacing, typography } from '@/theme';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
