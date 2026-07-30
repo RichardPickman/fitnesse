@@ -27,3 +27,14 @@
 | **`MUSCLE_PATHS`** | Array of `{ id, d, view }` objects, one per granular SVG group. |
 | **`MUSCLE_PATH_BY_ID`** | Lookup object mapping SVG ID → its path data for O(1) access. |
 | **`BODY_OUTLINE_IDS`** | Array of SVG IDs that represent the body outline (currently just `["body"]`). |
+
+## Exercise Library Sync
+
+| Term | Definition |
+|------|------------|
+| **Seed bundle** | Hardcoded TypeScript file (`src/db/seed-exercises.ts`) containing ~20 bodyweight exercises, 6 muscle groups, and their mappings. Used to bootstrap the local DB on first launch with no network. |
+| **Delta sync** | A sync that only fetches exercises where `updated_at >= last_synced_at`, avoiding re-downloading unchanged data. |
+| **Cursor-based pagination** | Pagination using the `updated_at` of the last item in a page as the cursor for the next page. More reliable than offset-based pagination on mobile. |
+| **`last_synced_at`** | A timestamp stored in the `app_metadata` table indicating when the last successful cloud sync completed. Used for delta sync. |
+| **`app_metadata`** | A key-value SQLite table for storing app-level metadata like `last_synced_at`. |
+| **Sync screen** | A modal screen (`/sync`) where the user can manually trigger a cloud sync and see progress. |
