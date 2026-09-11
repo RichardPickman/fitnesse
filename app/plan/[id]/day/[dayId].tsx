@@ -9,13 +9,7 @@ import { usePlanStore } from '@/stores/planStore';
 import { colors, spacing, typography } from '@/theme';
 import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 // ---------------------------------------------------------------------------
 // Component
@@ -23,22 +17,16 @@ import {
 
 export default function DayEditorScreen() {
   const { id: planId, dayId } = useLocalSearchParams<{ id: string; dayId: string }>();
-  const { plans, loadPlans } = usePlanStore();
-  const { exercises, muscleGroups, mappings, getMusclesForExercise, loadLibrary } = useExerciseStore();
+  const { plans } = usePlanStore();
+  const { exercises, muscleGroups, mappings, getMusclesForExercise } = useExerciseStore();
 
   const plan = plans.find((p) => p.plan.id === planId);
   const day = plan?.days.find((d) => d.id === dayId);
   const dayIndex = day?.day_of_week ?? 0;
-  const {
-    search,
-    filterGroup,
-    filteredExercises,
-    setSearch,
-    setFilterGroup,
-  } = useMuscleSearch({
+  const { search, filterGroup, filteredExercises, setSearch, setFilterGroup } = useMuscleSearch({
     exercises,
-    mappings
-  })
+    mappings,
+  });
 
   const {
     saving,
@@ -61,16 +49,16 @@ export default function DayEditorScreen() {
   // Load entries on focus
   useFocusEffect(
     useCallback(() => {
-      loadPlans();
-      loadLibrary();
-      if (dayId) {
-        getEntriesForDay(dayId).then(loadInitialData);
+      if (dayId && day) {
+        loadInitialData(day.entries);
       }
-    }, [dayId]),
+    }, [dayId, day]),
   );
 
   const getExercisePrimaryMuscles = (exerciseId: string): string =>
-    getMusclesForExercise(exerciseId).primary.map((m) => m.name).join(', ');
+    getMusclesForExercise(exerciseId)
+      .primary.map((m) => m.name)
+      .join(', ');
 
   if (!day) {
     return (
